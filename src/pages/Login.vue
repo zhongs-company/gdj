@@ -1,17 +1,26 @@
 <template>
-  <div class="hello">
-    123
-  </div>
+    <div class="hello">
+        123
+    </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-  name: "HelloWorld",
+  computed: mapState({
+    tabs: state => state.yfdt.tabs
+  }),
   data() {
     return {
       msg: "Welcome to Your Vue.js App"
     };
-  }
+  },
+  created() {
+    this.$store.dispatch("getSysType", ()=>{
+        console.log(this.tabs)
+    });
+  },
+  methods: {}
 };
 </script>
 
