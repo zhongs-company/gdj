@@ -2,8 +2,12 @@
 //base
 // $baseWidthSize: 117.1875 !default;
 $baseWidthSize: 75 !default;
-$addFontSize:4;
-$activeColor:#f5f4f4;
+$addFontSize1:40px/2;
+$addFontSize2:30px/2;
+$addFontSize3:28px/2;
+$addFontSize4:25px/2;
+$addFontSize5:22px/2;
+$activeColor:red;
 
 @function to($px) {
   @return $px / $baseWidthSize * 1rem;
