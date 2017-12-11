@@ -103,7 +103,6 @@ export default new Router({
       children: [
         { path: "evaluation", name: "Evaluation", component: Evaluation },
         { path: "training", name: "Training", component: Training },
-        { path: "registration", name: "Registration", component: Registration }
       ]
     },
     {
