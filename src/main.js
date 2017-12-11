@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 import Vue from 'vue'
+
+require('@/lib/directive')(Vue)
+
 import App from './App'
 import router from './router'
 import store from './vuex'
