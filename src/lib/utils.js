@@ -32,7 +32,7 @@ export var parseQueryString = function(url) {
 
 //获取url param
 export const getParam = function(attr, url) {
-    let match = RegExp(`[?&]${attr}=([^&]*)`).exec( url || window.location.search)
+    let match = RegExp(`[?&]${attr}=([^&]*)`).exec(url || window.location.search)
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '))
 }
 
@@ -67,9 +67,13 @@ export let setDate = (date) => {
 
     var t = new Date(date);
     var m = t.getMonth() + 1;
+    m < 10 ? m = '0' + m : m;
     var d = t.getDate();
+    d < 10 ? d = '0' + d : d;
     var h = t.getHours();
+    h < 10 ? h = '0' + h : h;
     var f = t.getMinutes();
+    f < 10 ? f = '0' + f : f;
 
     return m + '月' + d + '日   ' + '  ' + h + ':' + f;
 }
@@ -85,5 +89,29 @@ export let throttle = (fn, interval) => {
             fn.apply(_this, arguments);
             canRun = true;
         }, interval)
+    }
+}
+
+export let abc = (n) => {
+    var digit = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    return digit[n];
+}
+
+export let setTitle = (title) => {
+    document.title = title
+    var mobile = navigator.userAgent.toLowerCase()
+    if (/iphone|ipad|ipod/.test(mobile)) {
+        var iframe = document.createElement('iframe')
+        iframe.style.visibility = 'hidden'
+        // 替换成站标favicon路径或者任意存在的较小的图片即可
+        iframe.setAttribute('src', 'http://fileserver.pomesoft.com/uploads/yunfu/exam/logo07126fb9461f43108852611981d9f357.jpg')
+        var iframeCallback = function() {
+            setTimeout(function() {
+                iframe.removeEventListener('load', iframeCallback)
+                document.body.removeChild(iframe)
+            }, 0)
+        }
+        iframe.addEventListener('load', iframeCallback)
+        document.body.appendChild(iframe)
     }
 }

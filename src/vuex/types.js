@@ -7,7 +7,19 @@ export const YXKCK_GET_CLASSTAL = 'YXKCK_GET_CLASSTAL';
 export const YXKCK_RESET_DATA = 'YXKCK_RESET_DATA';
 export const YXKCK_GET_DETAIL = 'YXKCK_GET_DETAIL';
 export const YXKCK_UPDATE_ZAN = 'YXKCK_UPDATE_ZAN';
+export const YXKCK_UPDATE_ZAN_REDUCE = 'YXKCK_UPDATE_ZAN_REDUCE';
+
 export const YXKCK_DETAIL_UPDATE_ZAN = 'YXKCK_DETAIL_UPDATE_ZAN';
+export const YXKCK_DETAIL_UPDATE_ZAN_REDUCE = 'YXKCK_DETAIL_UPDATE_ZAN_REDUCE';
+export const YXKCK_SC = 'YXKCK_SC';
+export const YXKCK_RESET_DATA_DETAIL = 'YXKCK_RESET_DATA_DETAIL';
+export const YXKCK_SC_ADD = 'YXKCK_SC_ADD';
+export const YXKCK_SC_REDUCE = 'YXKCK_SC_REDUCE';
+export const YXKCK_DETAIL_SC = 'YXKCK_DETAIL_SC';
+export const YXKCK_DETAIL_SC_REDUCE = 'YXKCK_DETAIL_SC_REDUCE';
+export const YXKCK_GET_PAGE_HOT = 'YXKCK_GET_PAGE_HOT';
+export const YXKCK_GET_PAGE_FAVORITE = 'YXKCK_GET_PAGE_FAVORITE';
+
 
 export const MSG_POPUP_SHOW = 'MSG_POPUP_SHOW';
 export const MSG_POPUP_HIDE = 'MSG_POPUP_HIDE';
@@ -19,4 +31,59 @@ export const PXB_GET_LIST = 'PXB_GET_LIST';
 export const PXB_RESET = 'PXB_RESET';
 export const PXB_GET_DETIAL = 'PXB_GET_DETIAL';
 export const PXB_GET_TOPIC_LIST = 'PXB_GET_TOPIC_LIST';
+export const PXB_RESET_TOPIC_LIST = 'PXB_RESET_TOPIC_LIST';
+export const PXB_PUSH_TOPIC_LIST = 'PXB_PUSH_TOPIC_LIST';
+export const PXB_PXPB_LIST = 'PXB_PXPB_LIST';
+
+//答题
+export const PXB_PXPB_SIGNLE = 'PXB_PXPB_SIGNLE';
+export const PXB_PXPB_MUTIS = 'PXB_PXPB_MUTIS';
+export const PXB_PXPB_ORDER = 'PXB_PXPB_ORDER';
+export const PXB_PXPB_SUB = 'PXB_PXPB_SUB';
+
+export const PXBYF_GET_FL = 'PXBYF_GET_FL'
+export const PXBYF_GET_LIST = 'PXBYF_GET_LIST'
+export const PXBYF_RESET_LIST = 'PXBYF_RESET_LIST'
+export const PXBYF_LIST_ZAN = 'PXBYF_LIST_ZAN'
+export const PXBYF_LIST_DETAIL = 'PXBYF_LIST_DETAIL'
+
+// 考试
+export const KS_GET_LIST = 'KS_GET_LIST'
+export const KS_GET_DETAIL = 'KS_GET_DETAIL'
+export const KS_GET_WTLIST = 'KS_GET_WTLIST'
+export const KS_CURRENT_ITEM = 'KS_CURRENT_ITEM'
+export const KS_SIGNLE = 'KS_SIGNLE'
+export const KS_MULTI = 'KS_MULTI'
+export const KS_JUDEG = 'KS_JUDEG'
+export const KS_GET_MULTI = 'KS_GET_MULTI'
+export const KS_RESET_VALUE = 'KS_RESET_VALUE'
+export const KS_PASSSCORE = 'KS_PASSSCORE'
+export const KS_RESET_POPUP = 'KS_RESET_POPUP'
+export const KS_RESET_DATA = 'KS_RESET_DATA'
+export const KS_PRE = 'KS_PRE'
+export const KS_NEXT = 'KS_NEXT'
+export const ALLANSWER = 'ALLANSWER'
+export const KS_HIDE_BTN = 'KS_HIDE_BTN'
+
+
+// 培训互动
+export const PXHD_INIT = 'PXHD_INIT'
+export const PXHD_TABS = 'PXHD_TABS'
+export const PXHD_GET_LIST = 'PXHD_GET_LIST'
+export const PXHD_LIST_ZAN = 'PXHD_LIST_ZAN'
+export const PXHD_SEACH_LIST = 'PXHD_SEACH_LIST'
+export const PXHD_GET_CATID = 'PXHD_GET_CATID'
+export const PXHD_GET_DETAIL = 'PXHD_GET_DETAIL'
+
+
+//培训需求
+export const PXXQ_GET_LIST = 'PXXQ_GET_LIST'
+export const PXXQ_GET_LIST_DETAIL = 'PXXQ_GET_LIST_DETAIL'
+export const PXXQ_SIGNLE = 'PXXQ_SIGNLE'
+export const PXXQ_MULTI = 'PXXQ_MULTI'
+export const PXXQ_SUB = 'PXXQ_SUB'
+
+
+export const CENTER_MY_CLASS_LIST = 'CENTER_MY_CLASS_LIST'
+
 

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <router-view/>
+        <router-view></router-view>
         <!-- msgpopup -->
         <div class="msg-popup" v-show="isShow">{{value}}</div>
         <!-- loading -->

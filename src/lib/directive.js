@@ -48,7 +48,7 @@ module.exports = function(Vue) {
                     _vue.$store.commit('YXKCK_GET_LIST_NOPULL');
 
                     if (_vue.req.typeId) {
-                        _vue.getElnCourse({ m: "getPage", typeId:_vue.req.typeId });
+                        _vue.getElnCourse({ m: "getPage", typeId: _vue.req.typeId });
                         return;
                     }
 
@@ -60,7 +60,7 @@ module.exports = function(Vue) {
                         return;
                     }
 
-                    _vue.getElnCourse({ m: "getPage"});
+                    _vue.getElnCourse({ m: "getPage" });
 
                     console.log('上拉指令');
                 }
@@ -75,6 +75,11 @@ module.exports = function(Vue) {
         }
     });
 
-    
+   Vue.directive('focus', {
+        componentUpdated: function(el) {
+           el.focus();
+        }
+    });
+
 
 };

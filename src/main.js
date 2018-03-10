@@ -3,6 +3,7 @@
 import 'lib-flexible'
 import FastClick from 'fastclick';
 
+
 document.addEventListener('DOMContentLoaded', function () {
     FastClick.attach(document.body);
 }, false);

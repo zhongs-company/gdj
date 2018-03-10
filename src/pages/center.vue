@@ -1,40 +1,71 @@
 <template>
   <div class="centerBg">
     <div class="top">
-      <img class="personpic" src="../assets/img/centerbg.jpg">
-      <p class="name">微信昵称</p>
+      <img class="personpic" :src="headimgurl">
+      <p class="name">{{nickname}}</p>
     </div>
     <ul class="list">
-      <li>
+      <!-- <li>
         <div class="img1"></div>
         <div class="right">我的报名</div>
-      </li>
+      </li> -->
       <li>
         <div class="img2"></div>
-        <div class="right">我的考试</div>
+        <div class="right" @click="gotoMyExam()">我的考试</div>
       </li>
-      <li>
+      <!-- <li>
         <div class="img3"></div>
         <div class="right">我的签到</div>
-      </li>
+      </li> -->
+      <!-- <li>
+        <div class="img4"></div>
+        <div class="right" @click="gotoMyEvaluate()">我的评估</div>
+      </li> -->
       <li>
         <div class="img4"></div>
-        <div class="right">我的评估</div>
+        <div class="right" @click="toMyClass">我的课堂</div>
       </li>
       <li>
         <div class="img5"></div>
-        <div class="right">我的课堂</div>
+        <div class="right" @click="toCollect">我的收藏</div>
       </li>
     </ul>
   </div>
 </template>
+
 <script>
+
+import * as utils from "@/lib/utils";
+
 export default {
   name: "HelloWorld",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      msg: "Welcome to Your Vue.js App",
+      nickname:'',
+      headimgurl:''
     };
+  },
+  created(){
+    console.log(utils.userInfo);
+    //console.log($("p.name"))
+    //$("p.name").html(utils.userInfo.nickname);
+
+    var { nickname,headimgurl } = utils.userInfo;
+    this.nickname = decodeURIComponent(nickname);
+    this.headimgurl = headimgurl;
+  },
+  methods:{
+    toMyClass(){
+      this.$router.push({ name: 'CenterPage'})
+
+    },
+    gotoMyExam(){
+      this.$router.push({ name: 'SimulatiionTest'})
+    },
+    toCollect(){
+      this.$router.push({ name: 'LibraryCollect'})
+    }
   }
 };
 

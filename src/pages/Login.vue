@@ -5,38 +5,57 @@
             <li>
                 <div class="left">姓名</div>
                 <span></span>
-                <input class="right">
+                <input class="right" v-model="name">
             </li>
             <li>
-                <div class="left">公号</div>
+                <div class="left">工号</div>
                 <span></span>
-                <input class="right">
+                <input class="right" v-model="id">
             </li>
         </ul>
-        <div class="bindBtn">用户绑定</div>
+        <div class="bindBtn" @click="sub">用户绑定</div>
     </div>
 </template>
 <script>
+import * as api from '@/vuex/api';
 import { mapState } from "vuex";
 export default {
-    computed: mapState({
-        tabs: state => state.yfdt.tabs
-    }),
+    computed: mapState({}),
     data() {
         return {
-            msg: "Welcome to Your Vue.js App"
+            id: '',
+            name: ''
         };
     },
-    created() {
-        // this.$store.dispatch("getSysType", () => {
-        //     console.log(this.tabs)
-        // });
-    },
-    methods: {}
+    created() {},
+    methods: {
+        sub() {
+            if (this.id.trim() && this.name.trim()) {
+                api.rz({
+                    workId: this.id.trim(),
+                    realName: this.name.trim(),
+                    success: (res) => {
+                        if (res.ret == 0) {
+                            var path = window.localStorage.getItem('path') || 'Login';
+                            console.log(path);
+                            this.$router.push({ name: path })
+                        } else {
+                            this.$store.commit('MSG_POPUP_SHOW', {
+                                value: '绑定失败！'
+                            });
+                        }
+                    }
+                })
+            } else {
+                this.$store.commit('MSG_POPUP_SHOW', {
+                    value: '工号姓名不能为空！'
+                });
+            }
+        }
+    }
 };
 
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import '../scss/_mixins.scss';
 .bindBg {

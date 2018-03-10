@@ -1,5 +1,6 @@
 <template>
   <div class="body">
+      <textarea name="text" id="" cols="30" rows="10" autofocus="autofocus"></textarea>
       <router-view></router-view>
   </div>
 </template>

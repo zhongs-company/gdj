@@ -3,47 +3,33 @@
         <div class="nextBox">
             <div class="evaluationBox">
                 <div class="title">{{examTitle}}</div>
-                <div class="introduction">
-                    <!-- 单选 -->
-                    <div class="questionBox" v-if="examItemList[currentIndex].itemType == 'signle'">
-                        <div class="questiontitle">{{currentIndex+1}}、{{examItemList[currentIndex].itemTitle}}（单选）</div>
+                <div class="introduction" v-for="(currentExamItem, index) in allAnswer" v-if="currentExamItem.isCorrect== 'N'">
+                    <div class="questionBox" v-if="currentExamItem.itemType == 'signle'">
+                        <div class="questiontitle">{{index+1}}、{{currentExamItem.itemTitle}}（单选）</div>
                         <ul class="questionitem">
-                            <li @click="signle(index)" :class="{ on:item.isSelect }" v-for="(item,index) in examItemList[currentIndex].optionList" :key="index">{{ index | abc(index) }}、{{item.option}}</li>
+                            <li :class="{ on: item.isSelect }" v-for="(item,index) in currentExamItem.optionList" :key="index">{{ index | abc(index) }}、{{item.option}}</li>
                         </ul>
                     </div>
-                    <!-- 多选 -->
-                    <div class="questionBox" v-if="examItemList[currentIndex].itemType == 'multi'">
-                        <div class="questiontitle">{{currentIndex+1}}、{{examItemList[currentIndex].itemTitle}}（多选）</div>
+                    <div class="questionBox" v-if="currentExamItem.itemType == 'multi'">
+                        <div class="questiontitle">{{index+1}}、{{currentExamItem.itemTitle}}（多选）</div>
                         <ul class="questionitem">
-                            <li @click="multi(index)" :class="{ on:item.isSelect }" v-for="(item,index) in examItemList[currentIndex].optionList">{{ index | abc(index) }}、{{item.option}}</li>
+                            <li :class="{ on:item.isSelect }" v-for="(item,index) in currentExamItem.optionList">{{ index | abc(index) }}、{{item.option}}</li>
                         </ul>
                     </div>
-                    <!-- 判断题 -->
-                    <div class="questionBox" v-if="examItemList[currentIndex].itemType == 'judge'">
-                        <div class="questiontitle">{{currentIndex+1}}、{{examItemList[currentIndex].itemTitle}}（判断）</div>
+                    <div class="questionBox" v-if="currentExamItem.itemType == 'judge'">
+                        <div class="questiontitle">{{index+1}}、{{currentExamItem.itemTitle}}（判断）</div>
                         <ul class="questionitem">
-                            <li @click="judge(index)" :class="{ on:item.isSelect }" v-for="(item,index) in examItemList[currentIndex].optionList">{{ index | abc(index) }}、{{item.option}}</li>
+                            <li :class="{ on:item.isSelect }" v-for="(item,index) in currentExamItem.optionList">{{ index | abc(index) }}、{{item.option}}</li>
                         </ul>
                     </div>
-                    <!-- 问答题 -->
-                    <div class="questionBox" v-if="examItemList[currentIndex].itemType == 'ask' || examItemList[currentIndex].itemType == 'blank'">
-                        <div class="questiontitle">{{currentIndex+1}}、{{examItemList[currentIndex].itemTitle}}（问答）</div>
-                        <textarea v-model="examItemList[currentIndex].input" name="ask" id="" cols="30" rows="10" placeholder="请输入…"></textarea>
+                    <div class="questionBox" v-if="currentExamItem.itemType == 'ask' || currentExamItem.itemType == 'blank'">
+                        <div class="questiontitle">{{index+1}}、{{currentExamItem.itemTitle}}（问答）</div>
+                        <textarea v-model="currentExamItem.userAnswer" name="ask" id="" cols="30" rows="10"></textarea>
                     </div>
+                    <div class="answer">正确答案：{{currentExamItem.correctAnswer}}</div>
+                    <div class="answer right" v-if="currentExamItem.isCorrect== 'Y'">回答：√</div>
+                    <div class="answer error" v-if="currentExamItem.isCorrect== 'N'">回答：×</div>
                 </div>
-            </div>
-            <div class="btnlist">
-                <div class="beginBtn" v-show="showPre" @click="pre">上一题</div>
-                <div class="beginBtn" v-show="showNext" @click="next">下一题</div>
-                <div class="beginBtn" v-show="showBut" @click="sub">提交</div>
-            </div>
-        </div>
-        <div class="endPop" v-show="showPassScorePopup">
-            <h2 class="endTitel">您本次考试的成绩为:</h2>
-            <div class="points"><i>{{score}}</i>分</div>
-            <div class="btnlist">
-                <div class="beginBtn" @click="checkAnswer">查看全部答案</div>
-                <div class="beginBtn" @click="checkAnswerError">查看错题集</div>
             </div>
         </div>
     </div>
@@ -51,163 +37,17 @@
 <script>
 import { mapState } from "vuex";
 
-let zh = function(n) {
-    var digit = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    return digit[n];
-}
 
 export default {
     computed: mapState({
-        showBut: state => state.ks.showBut,
-        showPre: state => state.ks.showPre,
-        showNext: state => state.ks.showNext,
-        score: state => state.ks.score,
-        showPassScorePopup: state => state.ks.showPassScorePopup,
-        passScore: state => state.ks.passScore,
-        over: state => state.ks.over,
-        // shownextBtn: state => state.ks.shownextBtn,
-        // showsubmitBtn: state => state.ks.showsubmitBtn,
-        signleValue: state => state.ks.signleValue,
-        multiValue: state => state.ks.multiValue,
-        judgeValue: state => state.ks.judgeValue,
-        detailId: state => state.ks.detailId,
-        examTitle: state => state.ks.examTitle,
-        examItemList: state => state.ks.examItemList,
-        currentExamItem: state => state.ks.currentExamItem,
-        currentIndex: state => state.ks.currentIndex,
-        detailId1: state => state.ks.detailId1,
-
+        allAnswer: state => state.ks.allAnswer,
+        examTitle: state => state.ks.examTitle
     }),
-    data() {
-        return {
-            input: ''
-        };
-    },
     created() {
-        var { examId } = this.$route.params;
-        this.$store.dispatch("ks_getwtlist", { examId });
-    },
-    methods: {
-        submit(answer, itemId) {
-            // var currentExamItem = this.currentExamItem;
-            this.$store.dispatch('ks_saveItemAnswer', {
-                detailId: this.detailId,
-                itemId,
-                answer
-            });
 
-            //重置提交的value
-            //this.$store.commit('KS_RESET_VALUE');
-        },
+        var { detailId } = this.$route.params;
 
-        next() {
-
-            var currentExamItem = this.examItemList[this.currentIndex];
-            var isSub = false;
-
-            switch (currentExamItem.itemType) {
-                case 'signle':
-                case 'multi':
-                case 'judge':
-                    currentExamItem.optionList.forEach((item, index) => {
-                        if (item.isSelect) {
-                            isSub = true;
-                            return;
-                        }
-                    });
-                    break;
-                case 'ask':
-                case 'blank':
-                    if (currentExamItem.input.trim()) {
-                        isSub = true;
-                    }
-                    break;
-            }
-
-            if (!isSub) {
-                this.$store.commit('MSG_POPUP_SHOW', {
-                    value: '请先答题！'
-                });
-                return;
-            }
-
-            console.log('123');
-
-            this.$store.commit('KS_NEXT');
-
-            if (currentExamItem.itemType == 'signle') {
-
-                currentExamItem.optionList.forEach((item, index) => {
-                    if (item.isSelect) {
-                        this.submit(zh(index), currentExamItem.itemId);
-                        return;
-                    }
-                });
-                return;
-            }
-
-            if (currentExamItem.itemType == 'multi') {
-                //this.$store.commit('KS_GET_MULTI');
-                var answer = '';
-                currentExamItem.optionList.forEach((item, index) => {
-                    if (item.isSelect) {
-                        answer += zh(index);
-                    }
-                });
-                if (answer) {
-                    this.submit(answer, currentExamItem.itemId);
-                }
-                return;
-
-            }
-
-            if (currentExamItem.itemType == 'judge') {
-                currentExamItem.optionList.forEach((item, index) => {
-                    if (item.isSelect) {
-                        this.submit(zh(index), currentExamItem.itemId);
-                        return;
-                    }
-                });
-                return;
-            }
-
-
-            if (currentExamItem.itemType == 'ask' || currentExamItem.itemType == 'blank') {
-                if (currentExamItem.input.trim()) {
-                    this.submit(currentExamItem.input.trim(), currentExamItem.itemId);
-                }
-                return;
-            }
-
-
-        },
-        pre() {
-            this.$store.commit('KS_PRE');
-
-        },
-        signle(index) {
-            this.$store.commit('KS_SIGNLE', index);
-        },
-        multi(index) {
-            this.$store.commit('KS_MULTI', index);
-        },
-        judge(index) {
-            this.$store.commit('KS_JUDEG', index);
-        },
-        sub() {
-            this.next();
-            this.$store.commit('KS_HIDE_BTN');
-            this.$store.dispatch('ks_completeExam');
-        },
-        checkAnswer() {
-            this.$router.replace({ name: 'Lookanswer', params: { detailId: this.detailId1 } });
-            this.$store.commit('KS_RESET_POPUP');
-        },
-        checkAnswerError() {
-            this.$router.replace({ name: 'LookanswerError', params: { detailId: this.detailId1 } });
-            this.$store.commit('KS_RESET_POPUP');
-        }
-
+        this.$store.dispatch("ks_allAnswer", { detailId });
     },
     filters: {
         abc: function(n) {
@@ -215,24 +55,11 @@ export default {
             return digit[n];
         }
     }
-};
+}
 
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scope>
 @import '../../scss/_mixins.scss';
-html {
-    background: #e6f4ff;
-}
-
-textarea {
-    width: 80%;
-    height: to(180);
-    border-radius: to(5);
-    padding: to(5);
-    color: #323232;
-    font-size: to(24);
-}
 
 .interfaceBox {
     width: 100%;
@@ -484,6 +311,19 @@ textarea {
             text-align: center;
             line-height: to(58);
         }
+    }
+}
+.introduction {
+    .answer {
+        font-size: to(24);
+        color: red;
+        line-height: to(36);
+    }
+    .right {
+        color: #323232;
+    }
+    .error {
+        color: #323232;
     }
 }
 

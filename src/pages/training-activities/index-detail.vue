@@ -1,40 +1,40 @@
 <template>
     <transition name="left" mode="out-in">
         <div class="detailBox" v-scroll>
-            <div class="title">{{ detail.elnCourse.courseTitle }}</div>
+            <div class="title">{{ voteActivityObject.objectTitle }}</div>
             <div class="picBox">
                 <!-- 图片 -->
-                <img v-if="detail.elnCourse.contentType == 'image'" class="type" :src="detail.commonAttachmentList[0].filePath | imgsrc">
+                <img v-if="voteActivityObject.contentType == 'image'" class="type" :src="voteActivityObject.fileUrl | imgsrc">
                 <!-- 视频 -->
-                <video x5-video-player-fullscreen="true" x-webkit-airplay="true" webkit-playsinline playsinline="true" v-if="detail.elnCourse.contentType == 'video'" :src="detail.commonAttachmentList[0].filePath | imgsrc" class="type" controls="controls" style="height:200px; background-color:#000;"></video>
+                <video x5-video-player-fullscreen="true" x-webkit-airplay="true" webkit-playsinline playsinline="true" v-if="voteActivityObject.contentType == 'video'" :src="voteActivityObject.fileUrl | imgsrc" class="type" controls="controls" style="height:200px; background-color:#000;"></video>
                 <!-- 语音 -->
-                <div v-if="detail.elnCourse.contentType == 'audio'" style="position:relative;">
-                    <img class="type" :src="detail.elnCourse.coverImg | imgsrc">
-                    <audio id="audio" :src="detail.commonAttachmentList[0].filePath | imgsrc"></audio>
+                <div v-if="voteActivityObject.contentType == 'audio'" style="position:relative;">
+                    <img class="type" :src="voteActivityObject.coverImage | imgsrc">
+                    <audio id="audio" :src="voteActivityObject.fileUrl | imgsrc"></audio>
                     <span v-if="isShowAudioBtn" class="btn play" @click="play"></span>
                     <span v-if="!isShowAudioBtn" class="btn pause" @click="pause"></span>
                 </div>
                 <!-- 链接 -->
-                <a v-if="detail.elnCourse.contentType == 'link'" :href="detail.elnCourse.linkUrl">
-                    <img class="type" :src="detail.elnCourse.coverImg | imgsrc">
+                <a v-if="voteActivityObject.contentType == 'link'" :href="voteActivityObject.linkUrl">
+                    <img class="type" :src="voteActivityObject.coverImg | imgsrc">
                 </a>
                 <!-- 文本 -->
-                <div v-if="detail.elnCourse.contentType == 'html'" class="type">
-                    <img class="type" :src="detail.elnCourse.coverImg | imgsrc">
+                <div v-if="voteActivityObject.contentType == 'html'" class="type">
+                    <img class="type" :src="voteActivityObject.coverImg | imgsrc">
                 </div>
-                <div class="zan">
-                    <span style="line-height:40px;" @click="fav(detail.elnCourse.courseId)">
-                        <i class="start" ></i>{{detail.elnCourse.favoriteCount}}
+                <!--  <div class="zan">
+                    <span style="line-height:40px;" @click="fav(voteActivityObject.courseId)">
+                        <i class="start" ></i>{{voteActivityObject.favoriteCount}}
                     </span>
-                    <span style="line-height:40px;" @click="zan(detail.elnCourse.courseId)">
-                        <i class="heart" ></i>{{detail.elnCourse.upCount}}
+                    <span style="line-height:40px;" @click="zan(voteActivityObject.courseId)">
+                        <i class="heart" ></i>{{voteActivityObject.upCount}}
                     </span>
-                </div>
+                </div> -->
             </div>
             <div class="introduction">
                 <div class="tips">课程介绍</div>
-                <p class="text" v-html="detail.elnTeacher.teacherDesc"></p>
-                <p class="text" v-html="detail.elnCourse.courseDesc"></p>
+                <p class="text" v-html="voteActivityObject.content"></p>
+                <div class="toupiao" @click="toupiao" v-show="myVoteCountToday == 0">投票</div>
             </div>
         </div>
     </transition>
@@ -48,7 +48,8 @@ import { mapState } from "vuex";
 
 export default {
     computed: mapState({
-        detail: state => state.yxkck.detail
+        voteActivityObject: state => state.pxhd.voteActivityObject,
+        myVoteCountToday: state => state.pxhd.myVoteCountToday,
     }),
     data() {
         return {
@@ -56,41 +57,51 @@ export default {
         };
     },
     created() {
-        var { courseId } = this.$route.params;
-       
-        this.$store.dispatch("yxkck_getDetail", {
-            courseId,
-            m: 'getDetail'
+        var { objectId } = this.$route.params;
+
+        this.$store.dispatch("pxhd_voteActivityObject_detail", {
+            objectId: objectId.split('=')[0]
         });
     },
     methods: {
-        zan(courseId) {
-            if(this.detail.isThumb === 'N'){
-                this.$store.dispatch("yxkck_zan", courseId);
-                this.$store.commit('YXKCK_DETAIL_UPDATE_ZAN');
-                return;
-            } 
-            
-            if(this.detail.isThumb === 'Y'){
-                this.$store.dispatch("yxkck_zan_cancel", courseId);
-                this.$store.commit('YXKCK_DETAIL_UPDATE_ZAN_REDUCE');
-                return;
+        toupiao() {
+            var { objectId } = this.$route.params;
+            if (objectId) {
+                this.$store.dispatch('pxhd_voteActivityLog', { 
+                    objectId: objectId.split('=')[0], 
+                    activityId: objectId.split('=')[1]
+                });
+            } else {
+                alert('投票失败')
             }
         },
-        fav(courseId) {
+        // zan(courseId) {
+        //     if(this.detail.isThumb === 'N'){
+        //         this.$store.dispatch("yxkck_zan", courseId);
+        //         this.$store.commit('YXKCK_DETAIL_UPDATE_ZAN');
+        //         return;
+        //     } 
 
-            if(this.detail.isFavorite === 'N'){
-                this.$store.dispatch("yxkck_elnCourseFavorite", courseId);
-                this.$store.commit('YXKCK_DETAIL_SC');
-                return;
-            } 
-            
-            if(this.detail.isFavorite === 'Y'){
-                this.$store.dispatch("yxkck_elnCourseFavoriteCancel", courseId);
-                this.$store.commit('YXKCK_DETAIL_SC_REDUCE');
-                return;
-            }
-        },
+        //     if(this.detail.isThumb === 'Y'){
+        //         this.$store.dispatch("yxkck_zan_cancel", courseId);
+        //         this.$store.commit('YXKCK_DETAIL_UPDATE_ZAN_REDUCE');
+        //         return;
+        //     }
+        // },
+        // fav(courseId) {
+
+        //     if(this.detail.isFavorite === 'N'){
+        //         this.$store.dispatch("yxkck_elnCourseFavorite", courseId);
+        //         this.$store.commit('YXKCK_DETAIL_SC');
+        //         return;
+        //     } 
+
+        //     if(this.detail.isFavorite === 'Y'){
+        //         this.$store.dispatch("yxkck_elnCourseFavoriteCancel", courseId);
+        //         this.$store.commit('YXKCK_DETAIL_SC_REDUCE');
+        //         return;
+        //     }
+        // },
         play() {
             $('#audio')[0].play();
             this.isShowAudioBtn = !this.isShowAudioBtn;
@@ -211,6 +222,15 @@ export default {
         .text {
             line-height: to(40);
             font-size: $addFontSize4;
+        }
+        .toupiao {
+            height: to(88);
+            background-color: #221d6f;
+            text-align: center;
+            line-height: to(88);
+            font-size: to(32);
+            color: #fff;
+            margin-top: to(15);
         }
     }
 }

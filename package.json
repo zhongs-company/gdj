@@ -5,7 +5,7 @@
   "author": "zhongs <191492580@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --open --host 192.168.0.101 --port 8080",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --open --host 192.168.3.115 --port 8080",
     "start": "npm run dev",
     "build": "node build/build.js"
   },
