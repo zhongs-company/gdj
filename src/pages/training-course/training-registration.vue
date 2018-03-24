@@ -17,22 +17,24 @@
         <div class="introduction" v-show="isLeft" v-scroll>
             <p class="text"><i>开课时间：</i><span>{{beginTime}}</span></p>
             <p class="text"><i>开课地点：</i><span>{{address}}</span></p>
+            <p class="text"> <i>注意事项：</i><span>{{memo}}</span></p>
             <p class="text"><i>课程介绍：</i><span v-html="classDesc" id="intro-span"></span></p>
             <!-- <p class="text"><i>课程大纲：</i> <span>{{classDesc}}</span></p>  -->
-            <p class="text"> <i>注意事项：</i><span>{{memo}}</span></p>
-            <div class="btnlist1">
-                <!-- <div v-if="isApplyed === 'N'" class="beginBtn" @click="pxbm">培训报名</div> -->
+            <p class="text" style="height:80px"></p> 
 
-                <div v-if="classPhase==='training'" class="beginBtn">培训中</div>
+        </div>
+        <div class="btnlist1" v-show="isLeft">
+            <!--  <div v-if="classPhase==='training'" class="beginBtn">培训中</div>
                 <div v-if="classPhase==='waitbegin'" class="beginBtn">待开始</div>
                 <div v-if="classPhase === 'evaluate'" class="beginBtn" @click="toPxpg">培训评估</div>
                 <div v-if="(classPhase === 'enroll' && isApplyed === 'N')" class="beginBtn" @click="pxbm">培训报名</div>
-                <div v-if="(classPhase === 'enroll' && isApplyed === 'Y')" class="beginBtn">已报名</div>
+                <div v-if="(classPhase === 'enroll' && isEvaluated === 'Y')" class="beginBtn">已报名</div>
                 <div v-if="classPhase === 'course'" class="beginBtn">开课中</div>
                 <div v-if="classPhase === 'exam'" class="beginBtn">考试中</div>
                 <div v-if="classPhase === 'sign'" class="beginBtn">培训签到</div>
-                <div v-if="classPhase === 'complete'" class="beginBtn">已完成</div>
-            </div>
+                <div v-if="classPhase === 'complete'" class="beginBtn">已完成</div> -->
+            <div v-if="isEvaluated === 'N'" class="beginBtn" @click="toPxpg">培训评估</div>
+            <div v-if="isEvaluated === 'Y'" class="beginBtn" @click="toMsg">已评估</div>
         </div>
         <!-- 课程讨论 -->
         <div class="introduction1" v-show="isRight">
@@ -79,6 +81,7 @@ export default {
         beginTime: state => state.pxb.beginTime,
 
         isApplyed: state => state.pxb.isApplyed,
+        isEvaluated: state => state.pxb.isEvaluated,
         classPhase: state => state.pxb.classPhase,
         groupId: state => state.pxb.groupId,
         topicList: state => state.pxb.topicList,
@@ -97,11 +100,15 @@ export default {
     created() {
         var { classId } = this.$route.params;
         if (classId) {
-            this.$store.dispatch('pxb_getDetail', { classId, cb:()=>{
-                setTimeout(()=>{
-                    $('#intro-span img').css('max-width', '220px')
-                }, 0)
-            } })
+            this.$store.dispatch('pxb_getDetail', {
+                classId,
+                cb: () => {
+                    setTimeout(() => {
+                        $('#intro-span img').css('max-width', '220px')
+                        $('#intro-span video').css('max-width', '220px')
+                    }, 0)
+                }
+            })
         }
     },
     mounted() {
@@ -208,6 +215,11 @@ export default {
         },
         hide() {
             this.isShowPopup = false;
+        },
+        toMsg() {
+            this.$store.commit('MSG_POPUP_SHOW', {
+                value: '已评估!'
+            });
         }
     }
 };
@@ -271,10 +283,12 @@ export default {
     height: 100%;
     background: #e6f4ff;
     padding: 0 to(30);
-    overflow-x: hidden;
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
     .title {
         color: #040404;
         font-size: $addFontSize1;
@@ -288,7 +302,7 @@ export default {
         padding-bottom: to(30);
         img {
             width: 100%;
-            height: to(216);
+            height: to(392);
             margin-bottom: to(30);
         }
         .text {
@@ -307,7 +321,7 @@ export default {
                 @include wh(156, 44);
                 background: url(../../assets/img/litterBtn.png) 0 0 no-repeat;
                 background-size: 100%;
-                margin: to(45) auto;
+                margin: to(10) auto;
                 color: #fff;
                 font-size: $addFontSize2;
                 text-align: center;
@@ -321,7 +335,7 @@ export default {
     }
     .introduction {
         position: relative;
-        padding-bottom: to(60);
+        // padding-bottom: to(180);
         max-height: to(600);
         overflow-y: scroll;
         .tips {
@@ -353,14 +367,16 @@ export default {
         position: fixed;
         left: 0;
         width: 100%;
-        bottom: to(50);
+        bottom: to(10);
         display: flex;
         justify-content: space-between;
+        background-color: #e6f4ff;
+
         .beginBtn {
             @include wh(259, 58);
             background: url(../../assets/img/datiBtn.png) 0 0 no-repeat;
             background-size: 100%;
-            margin: to(85) auto to(50);
+            margin: to(50) auto to(50);
             color: #fff;
             font-size: $addFontSize2;
             text-align: center;
@@ -406,21 +422,23 @@ export default {
 }
 
 .introduction1 {
-    &:after {
-        content: '';
-        width: 100%;
-        height: to(88);
-        background-color: #fff;
-        position: absolute;
-        left: 0;
-        bottom: 0%;
-        background-color: #e6f4ff;
-    }
+    // padding-bottom:to(88);
+    // &:after {
+    //     content: '';
+    //     width: 100%;
+    //     height: to(88);
+    //     background-color: #fff;
+    //     position: absolute;
+    //     left: 0;
+    //     bottom: 0%;
+    //     background-color: #e6f4ff;
+    // }
     ul {
         position: relative;
         max-height: to(600);
         overflow-y: scroll;
         border-top: to(2) solid #fff;
+        padding-bottom:to(50);
         .discuss {
             display: flex;
             height: to(150);
@@ -518,6 +536,5 @@ export default {
         // }
     }
 }
-
 
 </style>

@@ -408,6 +408,29 @@ export let elnClassUser = function(req, cb) {
 }
 
 
+//取消培训报名
+//api/elnClassUser.action?m=delete
+export let elnClassUserQx = function(req, cb) {
+    var common = commonParams();
+    var reqObj = Object.assign(common, {
+        m: 'delete',
+        classId: req.classId
+    });
+
+    $.ajax({
+        type: "GET",
+        dataType: "jsonp",
+        url: `${config.api_url}/api/elnClassUser.action`,
+        data: reqObj,
+        success: res => {
+            cb && cb(res);
+        },
+        error: res => {
+            error('elnClass.action接口 ajax error', reqObj);
+        }
+    });
+}
+
 //培训评估
 export let elnClassPxpg = function(req, cb) {
     var common = commonParams();
@@ -954,6 +977,28 @@ export let center_getMyClassPage = function(req) {
         type: "GET",
         dataType: "jsonp",
         url: `${config.api_url}/api/elnClassUser.action`,
+        data: reqObj,
+        success: res => {
+            req.success && req.success(res);
+        },
+        error: res => {
+            error('ajax error', reqObj);
+        }
+    });
+}
+
+// /api/frontUser.action?m=getByFrontUserId
+export let get_user_info = function(req) {
+    var common = commonParams();
+
+    var reqObj = Object.assign(common, {
+        m: 'getByFrontUserId'
+    });
+
+    $.ajax({
+        type: "GET",
+        dataType: "jsonp",
+        url: `${config.api_url}/api/frontUser.action`,
         data: reqObj,
         success: res => {
             req.success && req.success(res);

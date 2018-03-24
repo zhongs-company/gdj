@@ -3,7 +3,7 @@
 import 'lib-flexible'
 import FastClick from 'fastclick';
 
-
+// import * as utils from "@/lib/utils";
 document.addEventListener('DOMContentLoaded', function () {
     FastClick.attach(document.body);
 }, false);
@@ -17,6 +17,7 @@ import router from './router'
 import store from './vuex'
 
 Vue.config.productionTip = false
+
 
 /* eslint-disable no-new */
 new Vue({

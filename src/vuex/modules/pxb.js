@@ -18,7 +18,8 @@ const state = {
     classLogo: '',
     className: '',
     address: '',
-    beginTime:'',
+    beginTime: '',
+    isEvaluated: '',
 
     memo: '',
     classDesc: '',
@@ -29,7 +30,7 @@ const state = {
     },
 
 
-    centerList:[]
+    centerList: []
 
 }
 
@@ -62,21 +63,21 @@ const actions = {
             commit(types.PXB_PXPB_LIST, res);
         });
     },
-    pxb_pxpg_sub({commit, state}, req){
+    pxb_pxpg_sub({ commit, state }, req) {
 
         commit(types.PXB_PXPB_SUB);
 
         api.elnClassvoteInfo({
             voteId: state.voteInfo.voteId,
-            userAnswerJson:JSON.stringify({ voteSubjectList:state.voteSubjectList })
-        }, (res)=>{
+            userAnswerJson: JSON.stringify({ voteSubjectList: state.voteSubjectList })
+        }, (res) => {
             req.cb && req.cb(res)
         });
     },
     //个人中心-我的课堂
-    center_getMyClassPage({commit, state}, req){
+    center_getMyClassPage({ commit, state }, req) {
         api.center_getMyClassPage({
-            success:(res)=>{
+            success: (res) => {
                 commit(types.CENTER_MY_CLASS_LIST, res);
             }
         })
@@ -93,7 +94,9 @@ const mutations = {
         var { list, total, page } = res;
         var list = list.map((item) => {
             return {
+                isApplyed: item.isApplyed,
                 classPhase: item.classPhase,
+                isEvaluated: item.isEvaluated,
                 classId: item.classId,
                 classLogo: `${config.cdn_img_src}${item.classLogo}`,
                 className: item.className,
@@ -123,6 +126,7 @@ const mutations = {
             memo,
             classDesc,
             classPhase,
+            isEvaluated,
             className,
             classLogo,
             groupId,
@@ -147,6 +151,7 @@ const mutations = {
         state.groupId = groupId;
         state.classPhase = classPhase;
         state.isApplyed = isApplyed;
+        state.isEvaluated = isEvaluated;
 
     },
     [types.PXB_GET_TOPIC_LIST](state, res) {
@@ -211,15 +216,15 @@ const mutations = {
 
         state.voteSubjectList[index].voteSubject.isAnswered = 'Y';
     },
-    [types.PXB_PXPB_ORDER](state, obj){
+    [types.PXB_PXPB_ORDER](state, obj) {
 
     },
-    [types.PXB_PXPB_SUB](state){
+    [types.PXB_PXPB_SUB](state) {
 
-        state.voteSubjectList.forEach((item)=>{
+        state.voteSubjectList.forEach((item) => {
             var type = item.voteSubject.subjectType;
-            if(type != 'signle' || type != 'multi'){
-                if((item.voteSubject.answerContent).trim() != ''){
+            if (type != 'signle' || type != 'multi') {
+                if ((item.voteSubject.answerContent).trim() != '') {
                     item.voteSubject.isAnswered = 'Y'
                 }
             }
@@ -227,10 +232,21 @@ const mutations = {
     },
 
     //个人中心-我的课堂
-    [types.CENTER_MY_CLASS_LIST](state, res){
-        if(res.data && res.data.list){
+    [types.CENTER_MY_CLASS_LIST](state, res) {
+        if (res.data && res.data.list) {
             state.centerList = res.data.list;
         }
+    },
+    [types.PXB_IS_BM](state, classId){
+        state.list.forEach((item)=>{
+            if(item.classId == classId){
+                if(item.isApplyed == 'Y'){
+                    item.isApplyed = 'N'
+                }else{
+                    item.isApplyed = 'Y'
+                }
+            }
+        })
     }
 }
 

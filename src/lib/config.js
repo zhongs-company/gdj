@@ -1,5 +1,5 @@
-export let api_url = 'http://api.pomesoft.com/sems-api';
-// export let api_url = 'http://192.168.0.102:9999';
+// export let api_url = 'http://api.pomesoft.com/sems-api';
+export let api_url = 'http://192.168.0.106:9999';
 export let app_code = 'yunfu';
 export let coopCode = 'yunfu';
 export let redirect_url = 'http://192.168.0.101:8080';

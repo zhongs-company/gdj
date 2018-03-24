@@ -35,10 +35,14 @@ export default {
                     workId: this.id.trim(),
                     realName: this.name.trim(),
                     success: (res) => {
+                        console.log(res);
                         if (res.ret == 0) {
                             var path = window.localStorage.getItem('path') || 'Login';
                             console.log(path);
-                            this.$router.push({ name: path })
+                            // this.$router.push({ name: path })
+                            // alert('http://html.pomesoft.com/yunfu/index.html#/'+path)
+                            window.location.href = 'http://html.pomesoft.com/yunfu/index.html#/'+path
+
                         } else {
                             this.$store.commit('MSG_POPUP_SHOW', {
                                 value: '绑定失败！'
@@ -85,8 +89,7 @@ export default {
             align-items: center;
             color: #fff;
             .left {
-
-                font-size: $addFontSize3;
+                font-size:to(28);
                 width: to(100);
                 border-right: to(1) solid #fff;
                 text-align: center;

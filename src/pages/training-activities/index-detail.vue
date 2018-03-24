@@ -4,7 +4,9 @@
             <div class="title">{{ voteActivityObject.objectTitle }}</div>
             <div class="picBox">
                 <!-- 图片 -->
-                <img v-if="voteActivityObject.contentType == 'image'" class="type" :src="voteActivityObject.fileUrl | imgsrc">
+                <a :href="voteActivityObject.fileUrl | imgsrc">
+                    <img v-if="voteActivityObject.contentType == 'image'" class="type" :src="voteActivityObject.fileUrl | imgsrc">
+                </a>
                 <!-- 视频 -->
                 <video x5-video-player-fullscreen="true" x-webkit-airplay="true" webkit-playsinline playsinline="true" v-if="voteActivityObject.contentType == 'video'" :src="voteActivityObject.fileUrl | imgsrc" class="type" controls="controls" style="height:200px; background-color:#000;"></video>
                 <!-- 语音 -->
@@ -34,7 +36,8 @@
             <div class="introduction">
                 <div class="tips">课程介绍</div>
                 <p class="text" v-html="voteActivityObject.content"></p>
-                <div class="toupiao" @click="toupiao" v-show="myVoteCountToday == 0">投票</div>
+                <div class="toupiao" @click="toupiao" v-if="myVoteCountToday == 0">投票</div>
+                <div class="toupiao" @click="toupiaoMsg" v-if="myVoteCountToday != 0">已投票</div>
             </div>
         </div>
     </transition>
@@ -67,13 +70,18 @@ export default {
         toupiao() {
             var { objectId } = this.$route.params;
             if (objectId) {
-                this.$store.dispatch('pxhd_voteActivityLog', { 
-                    objectId: objectId.split('=')[0], 
+                this.$store.dispatch('pxhd_voteActivityLog', {
+                    objectId: objectId.split('=')[0],
                     activityId: objectId.split('=')[1]
                 });
             } else {
                 alert('投票失败')
             }
+        },
+        toupiaoMsg() {
+            this.$store.commit('MSG_POPUP_SHOW', {
+                value: '你已投过票，明天再来哦！'
+            });
         },
         // zan(courseId) {
         //     if(this.detail.isThumb === 'N'){

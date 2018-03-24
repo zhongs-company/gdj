@@ -53,7 +53,9 @@ const actions = {
     },
 
     //点赞
-    yxkck_zan({ commit, state }, courseId) {
+    yxkck_zan({ commit, state }, req) {
+        let {courseId} = req;
+
         api.elnCourseThumb({
             m: "saveThumbCourse",
             courseId
@@ -66,11 +68,15 @@ const actions = {
             if (res.err_code == 4) {
                 commit(types.MSG_POPUP_SHOW, { value: '您已经点赞了！' });
             }
+
+            req.cb && req.cb();
         });
     },
 
     //取消点赞
-    yxkck_zan_cancel({ commit, state }, courseId) {
+    yxkck_zan_cancel({ commit, state }, req) {
+        let {courseId} = req;
+
         api.elnCourseThumb({
             m: "deleteThumbCourse",
             courseId
@@ -79,6 +85,8 @@ const actions = {
                 commit(types.MSG_POPUP_SHOW, { value: '已取消点赞！' });
                 commit(types.YXKCK_UPDATE_ZAN_REDUCE, courseId);
             }
+
+            req.cb && req.cb();
             // if (res.err_code == 4) {
             //     commit(types.MSG_POPUP_SHOW, { value: '您已经点赞了！' });
             // }
@@ -86,7 +94,10 @@ const actions = {
     },
 
     //收藏
-    yxkck_elnCourseFavorite({ commit, state }, courseId) {
+    yxkck_elnCourseFavorite({ commit, state }, req) {
+
+        let {courseId} = req;
+
         api.elnCourseFavorite({ courseId: courseId }, data => {
             if (data.ret == "0") {
                 //   this.$store.commit("YXKCK_SC");
@@ -99,11 +110,15 @@ const actions = {
                     value: data.msg
                 });
             }
+
+            req.cb && req.cb()
         });
     },
     //取消收藏
-    yxkck_elnCourseFavoriteCancel({ commit, state }, courseId) {
-        api.elnCourseFavoriteCancel({ courseId: courseId }, data => {
+    yxkck_elnCourseFavoriteCancel({ commit, state }, req) {
+        let {courseId} = req;
+
+        api.elnCourseFavoriteCancel({ courseId:courseId }, data => {
             if (data.ret == "0") {
                 commit(types.MSG_POPUP_SHOW, {
                     value: "已取消！"
@@ -114,6 +129,7 @@ const actions = {
                     value: data.msg
                 });
             }
+            req.cb && req.cb()
         });
     },
     //热门课程

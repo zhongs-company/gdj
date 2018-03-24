@@ -70,7 +70,7 @@ const router = new Router({
             },
             name: 'CenterPage',
             component: CenterPage,
-        },{
+        }, {
             path: '/center',
             meta: {
                 title: '个人中心'
@@ -92,14 +92,14 @@ const router = new Router({
                 meta: {
                     title: '云学课程库'
                 }
-            },{
+            }, {
                 path: "libraryhot",
                 name: "LibraryHot",
                 component: LibraryHot,
                 meta: {
                     title: '热门课程'
                 }
-            },{
+            }, {
                 path: "Librarycollect",
                 name: "LibraryCollect",
                 component: LibraryCollect,
@@ -112,11 +112,26 @@ const router = new Router({
             path: '/management',
             name: 'Management',
             component: Management,
-            children: [
-                { path: "leanmanagement", name: "Leanmanagement", component: Leanmanagement },
-                { path: "leanscenariol", name: "Leanscenariol", component: Leanscenariol },
-                { path: "classroom", name: "Classroom", component: Classroom },
-                { path: "essence", name: "Essence", component: Essence },
+            children: [{
+                    path: "leanmanagement",
+                    name: "Leanmanagement",
+                    component: Leanmanagement
+                },
+                {
+                    path: "leanscenariol",
+                    name: "Leanscenariol",
+                    component: Leanscenariol
+                },
+                {
+                    path: "classroom",
+                    name: "Classroom",
+                    component: Classroom
+                },
+                {
+                    path: "essence",
+                    name: "Essence",
+                    component: Essence
+                },
             ]
         },
         {
@@ -173,7 +188,7 @@ const router = new Router({
                 meta: {
                     title: '微课大赛'
                 }
-            },{
+            }, {
                 path: "activitiesDetail/:objectId",
                 name: "ActivitiesDetail",
                 component: ActivitiesDetail,
@@ -256,6 +271,34 @@ router.beforeEach((to, from, next) => {
         var redirect_url = encodeURIComponent(`${config.redirect_url}/#${to.path}`)
         var accredit_url = `${config.accredit_url}&redirect_url=${redirect_url}`;
         utils.wxChankeAuthorize(accredit_url, (userInfo) => {
+            let {
+                meta,
+                path
+            } = to;
+
+            utils.wxConfig({
+                success: () => {
+
+                    // alert('utils.wxConfig：'+ wx);
+
+                    wx.hideMenuItems({
+                        menuList: [
+                            "menuItem:copyUrl",
+                            "menuItem:openWithQQBrowser",
+                            "menuItem:share:qq",
+                            "menuItem:share:weiboApp",
+                            "menuItem:share:QZone",
+                            "menuItem:openWithSafari"
+                        ]
+                    });
+
+                    utils.wxShare({
+                        title: meta.title || '',
+                        link: path
+                    })
+
+                }
+            })
             next();
         });
         console.log('授权');
@@ -265,7 +308,9 @@ router.beforeEach((to, from, next) => {
         if (utils.getParam('isVisitor') == 'Y') {
             window.localStorage.setItem('path', to.name);
             console.log('认证');
-            router.push({ name: 'Login' });
+            router.push({
+                name: 'Login'
+            });
             next();
         }
     }
@@ -274,7 +319,7 @@ router.beforeEach((to, from, next) => {
 });
 
 
-export let getRuleObj = function(name) {
+export let getRuleObj = function (name) {
     var ruleObj = {};
     if (config.rulePage.length == 0) return ruleObj;
     config.rulePage.forEach((item) => {

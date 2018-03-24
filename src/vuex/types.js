@@ -34,6 +34,7 @@ export const PXB_GET_TOPIC_LIST = 'PXB_GET_TOPIC_LIST';
 export const PXB_RESET_TOPIC_LIST = 'PXB_RESET_TOPIC_LIST';
 export const PXB_PUSH_TOPIC_LIST = 'PXB_PUSH_TOPIC_LIST';
 export const PXB_PXPB_LIST = 'PXB_PXPB_LIST';
+export const PXB_IS_BM = 'PXB_IS_BM';
 
 //答题
 export const PXB_PXPB_SIGNLE = 'PXB_PXPB_SIGNLE';

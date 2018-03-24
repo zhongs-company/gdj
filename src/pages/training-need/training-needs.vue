@@ -8,7 +8,7 @@
                         <div class="questionBox" v-if="item.voteSubject.subjectType == 'signle'">
                             <div class="questiontitle">{{index+1}}、{{item.voteSubject.subjectTitle}}</div>
                             <ul class="questionitem">
-                                <template v-for="(li, ind) in item.itemList">
+                                <div v-for="(li, ind) in item.itemList" :key="ind">
                                     <li :class="{ on: (li.isSelected == 'Y')}" v-if="li.isCustomerItem == 'N'" @click="signle(index, ind)">
                                         {{li.itemContent}}
                                     </li>
@@ -20,14 +20,14 @@
                                         {{li.itemContent}}
                                         <input type="text" class="input" v-model="li.customerText">
                                     </li> -->
-                                </template>
+                                </div>
                             </ul>
                         </div>
                         <!-- 多选 -->
                         <div class="questionBox" v-if="item.voteSubject.subjectType == 'multi'">
                             <div class="questiontitle">{{index+1}}、{{item.voteSubject.subjectTitle}}</div>
                             <ul class="questionitem">
-                                <template v-for="(li, ind) in item.itemList">
+                                <div v-for="(li, ind) in item.itemList" :key="ind">
                                     <li :class="{ on: (li.isSelected == 'Y')}" v-if="li.isCustomerItem == 'N'" @click="multi(index, ind)">
                                         {{li.itemContent}}
                                     </li>
@@ -35,7 +35,7 @@
                                         {{li.itemContent}}
                                         <input type="text" class="input" v-model="li.customerText">
                                     </li>
-                                </template>
+                                </div>
                             </ul>
                         </div>
                         <!-- 问答 -->
